@@ -1,0 +1,67 @@
+---
+description: "`keywords.md` を対象に重複・ノイズ・分類漏れを検査し、SEO 用キーワードリストが基準を満たしているかを自動バリデーションするルール"
+version: 1.0.0
+type: auto-attached
+tags: [keyword, validation, seo]
+globs:
+  - "content/keywords/**/*.md"
+  - "posts/**/keywords.md"
+  - "**/keywords.md"
+# 保存時にのみ実行し、他モードには影響しない
+alwaysApply: false
+---
+
+# Keyword Validation Rule（02）
+
+## 🎯 目的
+01‑Raw‑Import で生成された `keywords.md` が以下の品質基準を満たしているかを自動でチェックし、問題があれば Diagnostics と自動修正提案を行います。
+
+## 🔎 検査項目
+
+### 1. 重複・類似度チェック
+- [ ] **完全一致の重複ゼロ**：同一キーワードが 1 行に 1 回のみ出現する
+- [ ] **類似スコア ≥ 0.90 の行が 2 つ以上存在しない**（Jaro–Winkler で判定）
+
+### 2. フォーマット & カテゴリ項目
+- [ ] **Primary** セクションが 1 行以上ある
+- [ ] **Secondary** セクションが 3 行以上ある
+- [ ] **Support** セクションが存在する（空欄可）
+
+### 3. ノイズフィルタ
+- [ ] 1‑2 文字の単語は含まれない（例: "が", "の"）
+- [ ] ストップワード（日本語助詞・英語冠詞など）は除外済み
+- [ ] 文字数 > 60 のロングテールは別ファイルに退避（`keywords-longtail.md`）
+
+### 4. ソート & グループ
+- [ ] Primary は検索ボリューム順（大→小）
+- [ ] Secondary は ABC 順、Support は関連度順
+
+## 📤 自動修正テンプレート
+```
+# Primary
+{{primary_keywords}}
+
+# Secondary
+{{secondary_keywords_sorted}}
+
+# Support
+{{support_keywords}}
+```
+Diagnostics で `--fix` を選択すると、このテンプレートに従い自動整形後に上書き保存されます。
+
+---
+
+## ✅ Validation Checklist（AI 用）
+- 重複 :duplicate:
+- 類似スコア :similar:
+- セクション不足 :section-missing:
+- ストップワード :stopword:
+- 長過ぎ :longtail:
+
+---
+
+### 参考基準
+- Google 検索品質評価ガイドラインのキーワード関連性セクション
+- METI SEO Guide 2024 版のキーワード重複排除推奨
+
+> **次ステップ**: 検査が通過したら `persona` モードに切り替えてペルソナ生成を行ってください。

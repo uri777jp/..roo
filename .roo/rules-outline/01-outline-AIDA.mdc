@@ -1,0 +1,56 @@
+---
+description: "ペルソナ情報を基に AIDA フレームワークで記事の目次を生成するルール"
+version: 1.0.0
+type: auto-attached
+tags: [outline, AIDA, blog]
+# persona.md が保存・変更されたときに発火
+globs:
+  - "**/persona.md"
+# 目次テンプレート生成時のみ実行
+alwaysApply: false
+---
+
+# Outline Template Rule – AIDA（01）
+
+## 🎯 目的
+`persona.md` に記載された読者像をもとに、AIDA（Attention→Interest→Desire→Action）フレームワークに沿った記事構成テンプレートを自動生成し、`outline.md` として同階層に保存する。
+
+## 🔄 処理フロー
+1. **Input 読み込み**
+   - `persona.md` の YAML または見出しブロックから、\_PersonaName / PainPoints / Goals / Objections を抽出。
+   - 同フォルダに存在する `keywords.md` も併せて読み取り、Primary／Secondary キーワードを取得。
+2. **AIDA 4 ステージにマッピング**
+   - **Attention (H2)**: ペルソナの最大の PainPoint をタイトル化し、共感を呼ぶ導入を記述。
+   - **Interest (H2)**: 課題を深掘りする背景説明と、主要キーワードで検索者意図に答える Q&A セクション (H3) を作成。
+   - **Desire (H2)**: 解決策として紹介する方法・事例・ベネフィットをリスト化 (H3)。
+   - **Action (H2)**: CTA として次のステップ（資料DL・商品紹介など）を提案 (H3)。
+3. **outline.md 生成**
+   - 以下テンプレートに値を挿入して新規ファイルを保存（既存ファイルがある場合は上書き確認）。
+
+```md
+# {{ ペルソナ名 }} が抱える {{ 最大のPainPoint }} を解決する方法
+
+## Attention: 読者の悩みを一言で突く
+- {{ PainPoint }} を明示し共感を誘うリード文
+
+## Interest: 課題を深掘りする背景と原因
+### Q1. {{ SecondaryKeyword1 }} とは？
+### Q2. {{ SecondaryKeyword2 }} を失敗する理由
+
+## Desire: 解決策とベネフィット
+### ステップ1. {{ SolutionStep1 }}
+### 事例: {{ CaseStudy }}
+
+## Action: 今すぐできる次の一歩
+- CTA: {{ CTA 文言 }}
+```
+
+4. **Validation Checklist**
+   - [ ] 4 つの H2 (Attention/Interest/Desire/Action) がすべて存在する
+   - [ ] Primary キーワードが H1 と 150 文字以内のリード文に登場
+   - [ ] Secondary キーワードが最低 3 つ H3 に配置
+   - [ ] CTA セクションが用意されている
+
+## 💡 Tips
+- PainPoint が複数ある場合は最も検索意図に近いものを選択。
+- CTA はサービス紹介／無料資料DL／メール購読など目的に応じて切り替え可能。

@@ -1,0 +1,13 @@
+# Ignore everything
+*
+
+# Track only .roo directory and its files
+!.gitignore
+!.roo/
+!.roo/**
+!.roo/**/*.mdc
+!.roo/.roomodes
+
+# Ignore temp and log files
+*.log
+*.bak 

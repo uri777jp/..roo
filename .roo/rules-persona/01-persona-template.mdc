@@ -1,0 +1,49 @@
+---
+description: "キーワードリストを基に読者ペルソナを自動生成し、`persona.md` テンプレートに挿入するルール"
+version: 1.0.0
+type: auto-attached
+tags: [persona, blog, seo]
+# keywords.md が保存されたら発火し、同階層に persona.md を生成
+globs:
+  - "**/keywords.md"
+# テンプレート生成時のみ実行
+alwaysApply: false
+---
+
+# Persona Template Rule（01）
+
+## 🎯 目的
+Validated `keywords.md` を入力として、ターゲット読者の詳細なペルソナシートを `persona.md` として生成する。マーケ視点で記事の方向性を明確にし、後続のアウトライン作成を容易にする。
+
+## 🔄 処理フロー
+1. **入力取得**: 同ディレクトリの `keywords.md` を読み込み、Primary / Secondary キーワード群を抽出。
+2. **分析**: 検索意図 (info / commer / tran / navig) を推定し、想定課題・動機を整理。
+3. **ペルソナ出力**: 下記テンプレートを `persona.md` として書き出す (既存ファイルがあれば上書き確認)。
+
+## 📝 出力テンプレート（一例）
+```md
+# 読者ペルソナ
+
+| 項目 | 内容 |
+|------|------|
+| 名前 (仮) | {{ name }} |
+| 年齢層 | {{ ageRange }} |
+| 職業/属性 | {{ job }} |
+| 居住エリア | {{ location }} |
+| 主な検索意図 | {{ searchIntent }} |
+| 抱える課題 | {{ painPoints }} |
+| 記事で達成したいゴール | {{ goal }} |
+| 購買 / 行動トリガー | {{ trigger }} |
+| 関連キーワード | {{ secondaryKeywords }} |
+```
+
+## ✅ Validation Checklist
+- [ ] `persona.md` が生成されている
+- [ ] テンプレートの全フィールドが埋まっている
+- [ ] `searchIntent` が info / commer / tran / navig のいずれかで表記
+- [ ] `secondaryKeywords` に最低 3 個以上のキーワードを列挙
+
+## 💡 Tips
+- 名前は親しみやすいカタカナ・ひらがな推奨 (例: フミオさん)。
+- ペインポイントは体験談風に 2〜3 行で具体化すると後の本文で再利用しやすい。
+- ゴール設定は「何が出来るようになるか」を端的に。

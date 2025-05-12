@@ -1,0 +1,103 @@
+{
+  "customModes": [
+    {
+      "slug": "keyword-processor",
+      "name": "Keyword Processor",
+      "roleDefinition": "キーワードデータの処理と最適化を行うアシスタントです。",
+      "customInstructions": "入力データの規模に応じて動的にバッチサイズを調整し、効率的な処理を行います。",
+      "groups": [
+        "read",
+        [
+          "edit",
+          { "fileRegex": "raw/keywords-paste/.*|content/keywords/blog/.*" }
+        ],
+        [
+          "terminal",
+          { "allowedCommands": ["wc -l", "sort", "uniq", "iconv"] }
+        ]
+      ]
+    },
+    {
+      "slug": "batch-orchestrator",
+      "name": "Batch Orchestrator",
+      "roleDefinition": "大規模キーワードデータのバッチ処理を管理・監視するオーケストレーターです。",
+      "customInstructions": "処理状況の監視、エラーハンドリング、再試行管理を行います。",
+      "groups": [
+        "read",
+        [
+          "edit",
+          { "fileRegex": "raw/keywords-paste/batches/.*|content/keywords/blog/temp/.*" }
+        ],
+        [
+          "terminal",
+          { "allowedCommands": ["mv", "cp", "rm", "mkdir"] }
+        ]
+      ]
+    },
+    {
+      "slug": "debug-analyzer",
+      "name": "Debug Analyzer",
+      "roleDefinition": "バッチ処理中のエラーを分析し、適切な対処方法を提案するアシスタントです。",
+      "customInstructions": "エラーパターンの分析、原因特定、解決策の提案を行います。",
+      "groups": [
+        "read",
+        [
+          "edit",
+          { "fileRegex": "raw/keywords-paste/batches/.*\\.log$" }
+        ]
+      ]
+    },
+    {
+      "slug": "persona",
+      "name": "Persona Builder",
+      "roleDefinition": "キーワードリストを基に想定読者ペルソナを生成し、markdown テンプレートに埋め込むアシスタントです。",
+      "customInstructions": "心理的背景, 年齢層, 課題, 期待する成果を含める。",
+      "groups": [
+        "read",
+        [
+          "edit",
+          { "fileRegex": "content/persona/.+\\.md$" }
+        ]
+      ]
+    },
+    {
+      "slug": "outline",
+      "name": "Outline Designer",
+      "roleDefinition": "ペルソナとキーワードを参照して複数の目次構成案を提案します。",
+      "customInstructions": "AIDA, PREP など複数フォーマットを最低3案提示。",
+      "groups": [
+        "read",
+        [
+          "edit",
+          { "fileRegex": "content/outline/.+\\.md$" }
+        ]
+      ]
+    },
+    {
+      "slug": "title-writer",
+      "name": "Title & Heading Writer",
+      "roleDefinition": "確定した目次を基に SEO を意識したタイトル・見出し（H1〜H3）を作成するアシスタントです。",
+      "customInstructions": "タイトルは32字以内、見出しは60字以内、キーワードを必ず含める。",
+      "groups": [
+        "read",
+        [
+          "edit",
+          { "fileRegex": "content/draft/.+\\.md$" }
+        ]
+      ]
+    }
+  ],
+  "defaultMode": "keyword-processor",
+  "autoSwitch": {
+    "patterns": [
+      {
+        "filePattern": "raw/keywords-paste/batches/.*",
+        "mode": "batch-orchestrator"
+      },
+      {
+        "filePattern": ".*\\.log$",
+        "mode": "debug-analyzer"
+      }
+    ]
+  }
+}

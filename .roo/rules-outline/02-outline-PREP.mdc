@@ -1,0 +1,60 @@
+---
+description: "ペルソナ情報を使って PREP（Point‑Reason‑Example‑Point）フレームワークで記事の目次を生成するルール"
+version: 1.0.0
+type: auto-attached
+tags: [outline, PREP, blog]
+# persona.md が保存・変更されたら発火
+globs:
+  - "**/persona.md"
+# 目次テンプレート生成時のみ実行
+alwaysApply: false
+---
+
+# Outline Template Rule – PREP（02）
+
+## 🎯 目的
+`persona.md` に記載されたターゲット読者を基に、PREP フレームワーク（Point → Reason → Example → Point）に沿った記事構成テンプレートを自動生成し、`outline.md` として同階層に保存する。
+
+## 🔄 処理フロー
+1. **Input 読み込み**
+   - 同階層の `persona.md` を取得し、読者の課題・興味・購買動機を抽出。
+2. **テンプレート展開**
+   - 以下の雛形をベースに、抽出した情報でプレースホルダーを置換。
+3. **バリデーション**
+   - Validation Checklist に従い、見出し階層・文字数・重複表現を検査。
+4. **ファイル出力**
+   - 問題なければ `outline.md` として保存し、Diagnostics で完了を通知。
+
+## 📝 テンプレート雛形
+```md
+# {{Primary Keyword}} で{{ 読者の悩み }}を解決する方法
+
+## Point — 結論（H2）
+{{ 最終的な提案・主張（1文） }}
+
+## Reason — 理由（H2）
+### {{ 理由 1 }}（H3）
+{{ 補足説明 }}
+### {{ 理由 2 }}（H3）
+{{ 補足説明 }}
+
+## Example — 具体例（H2）
+### 事例 1: {{ 具体例 1 }}（H3）
+{{ 詳細 }}
+### 事例 2: {{ 具体例 2 }}（H3）
+{{ 詳細 }}
+
+## Point — 再結論（H2）
+{{ まとめと行動喚起 }}
+```
+
+## ✅ Validation Checklist
+- [ ] H1 に Primary キーワードが含まれている
+- [ ] Point / Reason / Example / Point の順序が正しい
+- [ ] H2 見出しは 4 つ以上・6 つ以下
+- [ ] 各見出しの文字数は 60 字以内
+- [ ] Example セクションに具体例が 2 件以上ある
+- [ ] 再結論（最後の Point）に CTA が含まれている
+
+---
+上記チェックに一つでも失敗した場合、Diagnostics に赤ラベルで詳細を表示し、自動修正提案 (Quick Fix) を行う。
